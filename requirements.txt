@@ -1,0 +1,45 @@
+attrs==22.2.0
+bert_score==0.3.13
+bioc==2.1
+datasets==2.14.7
+evaluate==0.4.1
+evaluation==0.0.2
+gisting==1.3.6
+hydra-core==1.3.2
+ipython==8.12.3
+joblib==1.3.2
+jsonlines==4.0.0
+langchain @ git+https://github.com/Shivanshu-Gupta/langchain
+matplotlib==3.8.2
+more_itertools==10.2.0
+nltk==3.8.1
+numpy==1.26.4
+omegaconf==2.3.0
+openai==0.28.1
+pandas==2.2.0
+plotly==5.18.0
+pydantic==1.10.13
+PyYAML==6.0.1
+PyYAML==6.0.1
+rank_bm25==0.2.2
+rich==13.7.0
+scikit_learn==1.3.2
+scipy==1.12.0
+seaborn==0.13.2
+simple_parsing==0.1.4
+spacy==3.7.2
+stanza==1.7.0
+tiktoken==0.5.1
+torch==2.1.0+cu118
+tqdm==4.66.1
+transformers==4.35.2
+typer==0.9.0
+
+# qdecomp:
+overrides>=3.1.0
+progressbar>=2.5
+edit_distance
+
+# extra:
+huggingface-hub>=0.0.12
+pause>=0.3

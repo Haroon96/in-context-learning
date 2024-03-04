@@ -1,9 +1,11 @@
 # Example Selection for In-Context Learning
 
-This repository can be used to run in-context learning (ICL) evaluations for a variety of datasets, LLMs, and example selection methods. In particular, it can is used to evaluate the in-context example selection methods described in the following papers:
+Framework for convenient In-context Learning (ICL) evaluations for different datasets, LLMs, and example selection methods. In particular, it is used to evaluate the in-context example selection methods proposed in the following papers:
 
-- [Coverage-based Example Selection for In-Context Learning](https://arxiv.org/abs/2305.14907) - BERTScore-Recall (BSR), Set-BSR
+- [Coverage-based Example Selection for In-Context Learning](https://arxiv.org/abs/2305.14907) - BERTScore-Recall (BSR), Set-BSR. Originally implemented in the [icl-coverage](https://github.com/Shivanshu-Gupta/icl-coverage) repository.
 - [GistScore: Learning Better Representations for In-Context Example Selection with Gist Bottlenecks](https://arxiv.org/abs/2311.09606) - GistScore, Set-GistScore. See also the [gist-icl](https://github.com/Shivanshu-Gupta/gist-icl) repository.
+
+Apart from the above, it also supports the following selectors: Random, BM25, SentenceBERT (Cosine). See [`constants`](src/constants.py) for a list of datasets and LLMs that have currently been evaluated.
 
 ## Setup
 
@@ -19,7 +21,7 @@ This repository can be used to run in-context learning (ICL) evaluations for a v
 4. [Optional] LLM-specific setup:
    1.  For experiments with LlaMA models, set the path to the directory containing downloaded LlaMA weights in `langchain.llms.huggingface.get_model_cache_dir`.
    2. Experiments with some LLMs may require setting up HuggingFace auth token by running `huggingface-cli login`.
-   3. Store the openai key in `openai_keys.txt`.
+   3. Store the OpenAI key in `openai_keys.txt` in the root directory.
 
 ## Organization
 

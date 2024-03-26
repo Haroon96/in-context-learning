@@ -10,15 +10,16 @@ Apart from the above, it also supports the following selectors: Random, BM25, Se
 ## Setup
 
 1. Download datasets unavailable in HuggingFace from [here][icl-datasets] and store them in `data/`.
-2. Install requirements: `pip install -r requirements.txt`
-3. Some third-party repos:
+2. Install Python 3.10.
+3. Install Python dependencies: `pip install -r requirements.txt`
+4. Some third-party repos:
    1. `qdecomp_with_dependency_graphs`: required for DROP dataset.
 
       ```bash
       mkdir icl-demo-selection/src/third_party
       git clone git@github.com:matanhasson/qdecomp_with_dependency_graphs.git icl-demo-selection/src/third_party/
       ```
-4. [Optional] LLM-specific setup:
+5. [Optional] LLM-specific setup:
    1.  For experiments with LlaMA models, set the path to the directory containing downloaded LlaMA weights in `langchain.llms.huggingface.get_model_cache_dir`.
    2. Experiments with some LLMs may require setting up HuggingFace auth token by running `huggingface-cli login`.
    3. Store the OpenAI key in `openai_keys.txt` in the root directory.

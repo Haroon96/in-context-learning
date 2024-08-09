@@ -18,6 +18,9 @@ lm_args_d = {
     'turbo-june': dict(
         lm_name=LLM.TURBO_JUNE, lm_type=P.OPENAI_CHAT, lm_url=None,
         lm_batch_size=1, lm_delay=10,),
+    'gpt4': dict(
+        lm_name=LLM.GPT4, lm_type=P.OPENAI_CHAT, lm_url=None, lm_batch_size=1, lm_delay=10,
+    ),
     # 'davinci': dict(
     #     lm_name=LLM.TEXT_DAVINCI_003, lm_type=P.OPENAI, lm_url=None,
     #     lm_batch_size=7, lm_delay=1,),

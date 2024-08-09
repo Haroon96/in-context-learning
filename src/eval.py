@@ -55,11 +55,12 @@ def evaluate_prompt(params, ex, res, prompt, demos, example_template, tokenizer)
             for d in demos]
         res['demo_targets'] = demo_targets
         npr.shuffle(demo_targets)
-        res['majority_pred'] = max(set(demo_targets), key=demo_targets.count)
-        majority_eval_metrics = example_template.check_output(res['majority_pred'], **ex)
-        prompt_metrics |= {f'majority_{k}': v for k, v in majority_eval_metrics.items()}
-        prompt_metrics['majority_precision'] = 100 * np.mean(
-            [t == res['_target'] for t in demo_targets])
+        if len(demo_targets) > 0:
+            res['majority_pred'] = max(set(demo_targets), key=demo_targets.count)
+            majority_eval_metrics = example_template.check_output(res['majority_pred'], **ex)
+            prompt_metrics |= {f'majority_{k}': v for k, v in majority_eval_metrics.items()}
+            prompt_metrics['majority_precision'] = 100 * np.mean(
+                [t == res['_target'] for t in demo_targets])
     orig_prompt = prompt
     if tokenizer:
         res['orig_prompt'] = orig_prompt

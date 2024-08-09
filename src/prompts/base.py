@@ -84,7 +84,7 @@ class GSM8KAccuracy(Metric):
 
 class TabMWPAccuracy(Metric):
 
-    def __init__(self, option_inds: list[str]) -> None:
+    def __init__(self, option_inds) -> None:
         self.option_inds = option_inds
 
     def __call__(self, pred, _target, **kwargs):

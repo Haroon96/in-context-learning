@@ -66,9 +66,19 @@ class Dataset(str, Enum):
     # Misc
     COLA = 'cola'
     TWEET = 'tweet_eval'
+    COPA = 'copa'
+    SWAG = 'swag'
+    HELLASWAG = 'hellaswag'
+    PIQA = 'piqa'
+    AESLC = 'aeslc'
+    DART = 'dart'
 
     # CoT
     GSM8K = 'gsm8k'
+
+    # Custom
+    YTIDEOLOGY = 'ytideology'
+    NEWSIDEOLOGY = 'newsideology'
 
 D = Dataset
 T = Task
@@ -82,7 +92,7 @@ category2datasets = {
     T.SUMMARIZATION: [D.AGNEWS],
     T.COT: [D.GSM8K],
     T.RC: [D.BOOLQ, D.DROP],
-    T.MISC: [D.COLA, D.TWEET],
+    T.MISC: [D.COLA, D.TWEET, D.YTIDEOLOGY, D.NEWSIDEOLOGY],
 }
 heldout_datasets = [
     D.WANLI,
@@ -126,11 +136,11 @@ class LLM(str, Enum):
     TEXT_DAVINCI_003 = 'text-davinci-003'
     TURBO = 'gpt-3.5-turbo-0301'
     TURBO_JUNE = 'gpt-3.5-turbo-0613'
-    GPT4 = 'gpt-4-0314'
+    GPT4 = 'gpt-4o'
     MAJORITY = 'majority'
 
 openai_lms = [LLM.BABBAGE_002, LLM.DAVINCI_002, LLM.CODE_CUSHMAN_001, LLM.CODE_DAVINCI_002, LLM.TEXT_DAVINCI_002, LLM.TEXT_DAVINCI_003, LLM.TURBO, LLM.TURBO_JUNE, LLM.GPT4]
-chat_lms = [LLM.TURBO, LLM.TURBO_JUNE]
+chat_lms = [LLM.TURBO, LLM.TURBO_JUNE, LLM.GPT4]
 
 context_length_limit = {
     LLM.CODE_CUSHMAN_001: 2048,
@@ -139,8 +149,7 @@ context_length_limit = {
     LLM.TEXT_DAVINCI_003: 4096,
     LLM.TURBO: 4000,
     LLM.TURBO_JUNE: 4000,
-    LLM.GPT4: 8192,
-
+    LLM.GPT4: 128000,
     LLM.BABBAGE_002: 16384,
     LLM.DAVINCI_002: 16384,
     LLM.NEO: 2048,

@@ -3,14 +3,16 @@ from pathlib import Path
 
 
 def llama_path(model_size: str = '7B'):
-    if Path(f'/srv/disk01/ucinlp/shivag5/llama_hf/{model_size}').exists():
-        return f'/srv/disk01/ucinlp/shivag5/llama_hf/{model_size}'
-    elif Path(f'/srv/nvme0/ucinlp/shivag5/llama_hf/{model_size}/').exists():
-        return f'/srv/nvme0/ucinlp/shivag5/llama_hf/{model_size}'
-    elif Path(f'/persist/Documents/research/gisting/.cache/llama_hf/{model_size}').exists():
-        return Path(f'/persist/Documents/research/gisting/.cache/llama_hf/{model_size}')
-    else:
-        raise ValueError('No llama path found')
+    if Path(f'/home/mharoon/llama/llama-2-{model_size.lower()}-chat').exists():
+        return f'/home/mharoon/llama/llama-2-{model_size.lower()}-chat'
+    # if Path(f'/srv/disk01/ucinlp/shivag5/llama_hf/{model_size}').exists():
+    #     return f'/srv/disk01/ucinlp/shivag5/llama_hf/{model_size}'
+    # elif Path(f'/srv/nvme0/ucinlp/shivag5/llama_hf/{model_size}/').exists():
+    #     return f'/srv/nvme0/ucinlp/shivag5/llama_hf/{model_size}'
+    # elif Path(f'/persist/Documents/research/gisting/.cache/llama_hf/{model_size}').exists():
+    #     return Path(f'/persist/Documents/research/gisting/.cache/llama_hf/{model_size}')
+    # else:
+    #     raise ValueError('No llama path found')
 
 def get_enc_len_fn(lm: LLM):
     if lm in [LLM.NEO, LLM.STARCODER, LLM.MISTRAL]:

@@ -59,7 +59,7 @@ def process_params(
             else:
                 print(f'Invalid preview option: {preview}')
     if run:
-        with jsonlines.open(paramsfile, mode='w') as writer:
+        with jsonlines.open(paramsfile, mode='a') as writer:
             # breakpoint()
             writer.write_all([p.to_dict() for p in params_to_run])
 
@@ -227,7 +227,7 @@ def main(
     return_params: bool = False,    # return the list of parameters and exit.
     only_incomplete: bool = False,  # filter the experiments that have already finished.
     only_prompts: bool = False, # used in `process_params`
-    preview: str | None = None, # used in `process_params`
+    preview: str = None, # used in `process_params`
     run: bool = False,  # used in `process_params`
     paramsfile: Path = Path('params.jsonl'),    # used in `process_params`
     collate_results: bool = True,   # whether to collate results.
@@ -269,7 +269,7 @@ def main(
     def get_params_l(
         seed, dataset, split, lm, selector, n_cands=-1, batch_sizes=None, selector_args={}):
         lmds2bs = defaultdict(lambda: None, {})
-        if dataset not in [D.YELP, D.PIQA, D.RTE, D.AESLC, D.AGNEWS, D.DART, D.DROP, D.BOOLQ]:
+        if dataset not in [D.YELP, D.PIQA, D.RTE, D.AESLC, D.AGNEWS, D.DART, D.DROP, D.BOOLQ, D.YTIDEOLOGY, D.NEWSIDEOLOGY]:
             lm2bs = defaultdict(lambda: '28;7', {'neo': '24;6', 'davinci': '80;20', 'llama-7B': '24;2', 'mistral': '24;2', 'zephyr': '24;2', 'llama-13B': '24;1', 'starcoder': '24;1', 'turbo': '24;1', 'turbo-june': '24;1'})
         else:
             lm2bs = defaultdict(lambda: '28;7', {'neo': '20;4', 'davinci': '80;10', 'llama-7B': '24;1', 'mistral': '24;1', 'zephyr': '24;1', 'llama-13B': '24;1', 'starcoder': '24;1', 'turbo': '24;1', 'turbo-june': '24;1'})
@@ -286,7 +286,7 @@ def main(
         ) | overrides['data']
         # if lm.startswith('turbo') or lm == 'davinci' or lm == 'davinci-002':
         #     dataset_args['n_test'] = 250
-        lm_args = lm_args_d[lm] | dict(lm_batch_size=lm_batch_size) | overrides['llm']
+        lm_args = lm_args_d.get(lm, None) | dict(lm_batch_size=lm_batch_size) | overrides['llm']
         selector_args = selector_args_d[selector] | selector_args | overrides['selector']
         selector_type = selector_args['selector_type']
 
@@ -311,7 +311,7 @@ def main(
 
         # splits = ds2splits.get(dataset, None)
         # n_cands = -1 if dataset not in [D.MNLI] else 44000
-        n_cands = 44000
+        n_cands = 20000
         for split in splits:
             if dataset == D.GEOQUERY and seed > 0 and 'lf' not in selector \
                     and split is not None and ('csl_template' in split or 'csl_tmcd' in split):

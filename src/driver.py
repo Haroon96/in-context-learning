@@ -53,7 +53,7 @@ def get_selector(
         ex_len_fn: function to compute tokenized length of examples in an ICL prompt.
         max_len: _description_. limit the number of demonstrations to select based on the available context length
     """
-    from selector import BertScoreSelector, GistBertScoreSelector, CosineCoverageSelector, StructuralCoverageSelector, LFCoverageSelector
+    from selector import BertScoreSelector, BalancedBertScoreSelector, GistBertScoreSelector, CosineCoverageSelector, StructuralCoverageSelector, LFCoverageSelector
     selector_type = P.selector.selector_type
     common_args = dict(
         args=P.selector, examples=candidates, query_examples=test_ds, example_template=example_template,
@@ -65,6 +65,8 @@ def get_selector(
         ex_selector = StructuralCoverageSelector.from_examples(**common_args, return_time=return_time)
     elif selector_type == ES.BERTSCORE:
         ex_selector = BertScoreSelector.from_examples(**common_args, return_time=return_time, device=device)
+    elif selector_type == ES.BALANCED_BERTSCORE:
+        ex_selector = BalancedBertScoreSelector.from_examples(**common_args, return_time=return_time, device=device)
     elif selector_type == ES.GIST_BERTSCORE:
         ex_selector = GistBertScoreSelector.from_examples(**common_args, return_time=return_time, device=device)
     elif selector_type == ES.LF_COVERAGE:

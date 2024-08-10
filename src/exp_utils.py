@@ -83,6 +83,7 @@ selector_args_d: dict[str, tuple[ES, dict]] = {
         metric='bm25', coverage=True, ordering=[None, 'bm25'], add_cand_score=True,
         cand_score_discount=[1, 3]),
     'bertscore': dict(selector_type=ES.BERTSCORE, metric='recall', coverage=False),
+    'balanced_bertscore': dict(selector_type=ES.BALANCED_BERTSCORE, metric='recall', coverage=False),
     'bertscore_prec': dict(selector_type=ES.BERTSCORE, metric=['precision', 'f1'], coverage=False),
     'set_bsr': dict(selector_type=ES.BERTSCORE,
         metric='recall', coverage=True, add_cand_score=[False, True][:1]),

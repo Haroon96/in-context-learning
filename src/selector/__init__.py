@@ -1,5 +1,6 @@
 from selector.base import StructuralSelectorArgs, CommonSelectorArgs, SamplingSelectorArgs
 from selector.bertscore import BertScoreSelector, BertScoreSelectorArgs
+from selector.balanced_bertscore import BalancedBertScoreSelector
 from selector.gist_bertscore import GistBertScoreSelector, GistBertScoreSelectorArgs
 from selector.cosine import CosineCoverageSelector, CosineCoverageSelectorArgs
 from selector.structural import StructuralCoverageSelector, StructuralCoverageSelectorArgs

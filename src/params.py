@@ -15,7 +15,7 @@ from selector import (
     BertScoreSelectorArgs,
     GistBertScoreSelectorArgs,
     StructuralCoverageSelectorArgs,
-    LFCoverageSelectorArgs,
+    LFCoverageSelectorArgs
 )
 from data_params import DataParams, ds2cls
 from tools.param_impl import Parameters, converter
@@ -27,6 +27,7 @@ sel2cls: dict[ES, type] = {
     ES.GIST_BERTSCORE: GistBertScoreSelectorArgs,
     ES.STRUCT: StructuralCoverageSelectorArgs,
     ES.LF_COVERAGE: LFCoverageSelectorArgs,
+    ES.BALANCED_BERTSCORE: BertScoreSelectorArgs
 }
 num2str = lambda x: 'all' if x == -1 else str(x)
 

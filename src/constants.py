@@ -106,6 +106,7 @@ class ExSel(str, Enum):
     RANDOM = 'random'
     BERTSCORE = 'bertscore'
     GIST_BERTSCORE = 'gist_bertscore'
+    BALANCED_BERTSCORE = 'balanced_bertscore'
     STRUCT = 'structural'
     COSINE = 'cosine'
     LF_COVERAGE = 'lf_coverage'

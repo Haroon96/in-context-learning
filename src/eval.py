@@ -33,12 +33,12 @@ def complete_prompts(params, llm, examples, prompts, sep, example_template):
             # response = llm._generate(messages, stop=[sep])
             # llm_outputs = [gen[0].text for gen in response.generations]
     else:   # classification
-        if params.lm_name not in chat_lms:
-            choices = [example_template.get_choices(**ex) for ex in examples]
-            llm_outputs = llm._classify_v3(prompts=prompts, choices=choices)
-        else:
-            response = llm.generate(prompts, stop=[sep])
-            llm_outputs = [gen[0].text for gen in response.generations]
+        # if params.lm_name not in chat_lms and not 'llama' in  params.lm_name.value:
+        #     choices = [example_template.get_choices(**ex) for ex in examples]
+        #     llm_outputs = llm._classify_v3(prompts=prompts, choices=choices)
+        # else:
+        response = llm.generate(prompts, stop=[sep])
+        llm_outputs = [gen[0].text for gen in response.generations]
             # raise NotImplementedError
 
     return llm_outputs

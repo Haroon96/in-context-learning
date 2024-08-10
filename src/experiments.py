@@ -323,7 +323,7 @@ def main(
             elif selector in ['cosine', 'cosine_coverage']:
                 emb_lms = 'sentence-transformers/all-mpnet-base-v2' if baselines_exp else cosine_emb_lms
                 params_l += get_params_fn(selector_args=dict(emb_lm=emb_lms))
-            elif selector == 'bertscore':
+            elif selector == 'bertscore' or selector == 'balanced_bertscore':
                 idfs = False if baselines_exp else [True, False]
                 emb_lms = 'microsoft/deberta-large-mnli' if baselines_exp else bertscore_emb_lms
                 params_l += get_params_fn(selector_args=dict(idf=idfs, emb_lm=emb_lms))

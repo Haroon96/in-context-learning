@@ -1112,8 +1112,11 @@ class YTIdeology(DataParams):
 
     def get_templates(self) -> Templates:
         T = Templates()
+        # instruction = '''
+        # Classify the following YouTube video titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. Try to think step-by-step to reason about the ideology but only respond with the final answer.
+        # '''.strip()
         instruction = '''
-        Classify the following YouTube video titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. 
+        Classify the following YouTube video titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. Only respond with the final answer.
         '''.strip()
         T.prefix_template = instruction if self.prefix else ''
         choices=["Liberal", "Neutral", "Conservative"]
@@ -1125,11 +1128,73 @@ class YTIdeology(DataParams):
         return T
 
     def get_dataset(self, data_root: str = '../data', dataloaders_dir: str = 'data'):
-        return load_dataset("csv",
+        return load_dataset("json",
             data_dir=f'{data_root}/classification/yt_ideology'
         )
-    
 
+@attr.s(auto_attribs=True)
+class YTChannelIdeology(YTIdeology):
+    dataset: D = D.YTCHANNELIDEOLOGY
+    task: T = T.MISC
+    train_split: str = 'train'
+    test_split: str = 'test'
+
+    def get_templates(self) -> Templates:
+        T = Templates()
+        instruction = '''
+        Classify the following YouTube video titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. The video uploader is also provided for additional context. 
+        '''.strip()
+        T.prefix_template = instruction if self.prefix else ''
+        choices=["Liberal", "Neutral", "Conservative"]
+        T.example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Channel: {uploader}\Ideology: {_target}')
+        T.instructed_example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Channel: {uploader}\nIs the above video title ideologically liberal, neutral, or conservative?\nAnswer: {_target}')
+        T.selection_example_template = T.instructed_example_template
+        return T
+    
+@attr.s(auto_attribs=True)
+class YTDescriptionIdeology(YTIdeology):
+    dataset: D = D.YTDESCRIPTIONIDEOLOGY
+    task: T = T.MISC
+    train_split: str = 'train'
+    test_split: str = 'test'
+
+    def get_templates(self) -> Templates:
+        T = Templates()
+        instruction = '''
+        Classify the following YouTube video titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. The video description is also provided for additional context. 
+        '''.strip()
+        T.prefix_template = instruction if self.prefix else ''
+        choices=["Liberal", "Neutral", "Conservative"]
+        T.example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Description: {description}\Ideology: {_target}')
+        T.instructed_example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\nDescription: {description}\nIs the above video title ideologically liberal, neutral, or conservative?\nAnswer: {_target}')
+        T.selection_example_template = T.instructed_example_template
+        return T
+
+@attr.s(auto_attribs=True)
+class YTChannelDescriptionIdeology(YTIdeology):
+    dataset: D = D.YTCHANNELDESCRIPTIONIDEOLOGY
+    task: T = T.MISC
+    train_split: str = 'train'
+    test_split: str = 'test'
+
+    def get_templates(self) -> Templates:
+        T = Templates()
+        instruction = '''
+        Classify the following YouTube video titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. The video uploader and description is also provided for additional context. Only respond with the final answer.
+        '''.strip()
+        T.prefix_template = instruction if self.prefix else ''
+        choices=["Liberal", "Neutral", "Conservative"]
+        T.example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Channel: {uploader}\Description: {description}\Ideology: {_target}')
+        T.instructed_example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\nChannel: {uploader}\nDescription: {description}\nIs the above video title ideologically liberal, neutral, or conservative?\nAnswer: {_target}')
+        T.selection_example_template = T.instructed_example_template
+        return T
+    
 @attr.s(auto_attribs=True)
 class NewsIdeology(DataParams):
     dataset: D = D.NEWSIDEOLOGY
@@ -1140,7 +1205,7 @@ class NewsIdeology(DataParams):
     def get_templates(self) -> Templates:
         T = Templates()
         instruction = '''
-        Classify the following news article titles as ideologically liberal, ideologically neutral, or ideologically conservative. Titles with no ideological content are classified as neutral. 
+        Classify the following news article titles as ideologically liberal, neutral, or conservative. Titles with no ideological content are classified as neutral. Only respond with the final answer.
         '''.strip()
         T.prefix_template = instruction if self.prefix else ''
         choices=["Liberal", "Neutral", "Conservative"]
@@ -1152,11 +1217,74 @@ class NewsIdeology(DataParams):
         return T
 
     def get_dataset(self, data_root: str = '../data', dataloaders_dir: str = 'data'):
-        data_files = {"train": "train.csv", "test": "test.csv"}
-        return load_dataset("csv",
+        data_files = {'train': 'train.json', 'test': 'test_small.json'}
+        return load_dataset("json",
             data_dir=f'{data_root}/classification/news_ideology',
             data_files=data_files
         )
+
+@attr.s(auto_attribs=True)
+class NewsSourceIdeology(NewsIdeology):
+    dataset: D = D.NEWSSOURCEIDEOLOGY
+    task: T = T.MISC
+    train_split: str = 'train'
+    test_split: str = 'test'
+
+    def get_templates(self) -> Templates:
+        T = Templates()
+        instruction = '''
+        Classify the following news article titles as ideologically liberal, neutral, or conservative. Titles with no ideological content are classified as neutral. The news source is also specified for additional context. Only respond with the final answer.
+        '''.strip()
+        T.prefix_template = instruction if self.prefix else ''
+        choices=["Liberal", "Neutral", "Conservative"]
+        T.example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Source: {source}\Ideology: {_target}')
+        T.instructed_example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\nSource: {source}\nIs the above article title ideologically liberal, neutral, or conservative?\nAnswer: {_target}')
+        T.selection_example_template = T.instructed_example_template
+        return T
+
+@attr.s(auto_attribs=True)
+class NewsDescriptionIdeology(NewsIdeology):
+    dataset: D = D.NEWSDESCRIPTIONIDEOLOGY
+    task: T = T.MISC
+    train_split: str = 'train'
+    test_split: str = 'test'
+
+    def get_templates(self) -> Templates:
+        T = Templates()
+        instruction = '''
+        Classify the following news article titles as ideologically liberal, neutral, or conservative. Titles with no ideological content are classified as neutral. The news description is also specified for additional context. Only respond with the final answer.
+        '''.strip()
+        T.prefix_template = instruction if self.prefix else ''
+        choices=["Liberal", "Neutral", "Conservative"]
+        T.example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Description: {text}\Ideology: {_target}')
+        T.instructed_example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Description: {text}\nIs the above article title ideologically liberal, neutral, or conservative?\nAnswer: {_target}')
+        T.selection_example_template = T.instructed_example_template
+        return T
+
+@attr.s(auto_attribs=True)
+class NewsSourceDescriptionIdeology(NewsIdeology):
+    dataset: D = D.NEWSSOURCEDESCRIPTIONIDEOLOGY
+    task: T = T.MISC
+    train_split: str = 'train'
+    test_split: str = 'test'
+
+    def get_templates(self) -> Templates:
+        T = Templates()
+        instruction = '''
+        Classify the following news article titles as ideologically liberal, neutral, or conservative. Titles with no ideological content are classified as neutral. The news source and description is also specified for additional context. Only respond with the final answer.
+        '''.strip()
+        T.prefix_template = instruction if self.prefix else ''
+        choices=["Liberal", "Neutral", "Conservative"]
+        T.example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Source: {source}\Description: {text}\Ideology: {_target}')
+        T.instructed_example_template = ClassificationTemplate(choices=choices,
+            templates='Title: {title}\Source: {source}\Description: {text}\nIs the above article title ideologically liberal, neutral, or conservative?\nAnswer: {_target}')
+        T.selection_example_template = T.instructed_example_template
+        return T
 
 # ---------------------------------------------------------------------------- #
 #                                 CoT Reasoning                                #
@@ -1205,7 +1333,7 @@ all_datasets = [
     MRPC, QQP, PAWS, PAWSX,
     COPA, HellaSwag, Swag, PIQA, CMSQA,
     AGNews,
-    CoLA, TweetEval, YTIdeology, NewsIdeology,
+    CoLA, TweetEval, YTIdeology, YTChannelIdeology, NewsIdeology, NewsSourceIdeology, NewsSourceDescriptionIdeology, NewsDescriptionIdeology, YTDescriptionIdeology, YTChannelDescriptionIdeology,
     DROP, BoolQ,
     GSM8K
 ]

@@ -78,7 +78,13 @@ class Dataset(str, Enum):
 
     # Custom
     YTIDEOLOGY = 'ytideology'
+    YTCHANNELIDEOLOGY = 'ytchannelideology'
+    YTDESCRIPTIONIDEOLOGY = 'ytdescriptionideology'
+    YTCHANNELDESCRIPTIONIDEOLOGY = 'ytchanneldescriptionideology'
     NEWSIDEOLOGY = 'newsideology'
+    NEWSSOURCEIDEOLOGY = 'newssourceideology'
+    NEWSDESCRIPTIONIDEOLOGY = 'newsdescriptionideology'
+    NEWSSOURCEDESCRIPTIONIDEOLOGY = 'newssourcedescriptionideology'
 
 D = Dataset
 T = Task
@@ -92,7 +98,11 @@ category2datasets = {
     T.SUMMARIZATION: [D.AGNEWS],
     T.COT: [D.GSM8K],
     T.RC: [D.BOOLQ, D.DROP],
-    T.MISC: [D.COLA, D.TWEET, D.YTIDEOLOGY, D.NEWSIDEOLOGY],
+    T.MISC: [D.COLA, D.TWEET, 
+             D.NEWSIDEOLOGY, D.NEWSSOURCEIDEOLOGY, D.NEWSSOURCEDESCRIPTIONIDEOLOGY, D.NEWSDESCRIPTIONIDEOLOGY,
+             D.YTIDEOLOGY, D.YTCHANNELIDEOLOGY, D.YTDESCRIPTIONIDEOLOGY, 
+             D.YTCHANNELDESCRIPTIONIDEOLOGY,
+             ]
 }
 heldout_datasets = [
     D.WANLI,

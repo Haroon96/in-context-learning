@@ -153,7 +153,7 @@ class AllParams(Parameters):
         if SP.selector_type in ES.RANDOM:
             path = path / f'{num2str(DP.n_cands)}_cands'
 
-        elif SP.selector_type in [ES.COSINE, ES.BERTSCORE, ES.GIST_BERTSCORE, ES.STRUCT, ES.LF_COVERAGE]:
+        elif SP.selector_type in [ES.COSINE, ES.BERTSCORE, ES.GIST_BERTSCORE, ES.STRUCT, ES.LF_COVERAGE, ES.BALANCED_BERTSCORE]:
             selector_name = self.selector_name
             path = path / f'{num2str(DP.n_cands)}_cands-{selector_name}'
 

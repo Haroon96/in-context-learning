@@ -57,7 +57,8 @@ def run_exps_parallel(
         return
 
     with jsonlines.open(paramsfile, mode='r') as reader:
-        params_l = [AllParams.from_dict(p) for p in reader][start_idx:]
+        params_l = [AllParams.from_dict(p) for p in reader.iter(skip_invalid=True)][start_idx:]
+        params_l = [p for p in params_l if not p.resultsfile.exists()]
         if clear_logs:
             for p in params_l:
                 outfile = p.outfile if not p.exp.only_prompts else p.promptsoutfile

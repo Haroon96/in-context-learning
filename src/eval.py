@@ -25,7 +25,7 @@ def complete_prompts(params, llm, examples, prompts, sep, example_template):
             response = llm.generate(prompts, stop=[sep])
             llm_outputs = [gen[0].text for gen in response.generations]
         else:   # turbo
-            response = llm._generate(prompts, stop=[sep])
+            response = llm._generate(prompts)
             llm_outputs = [gen[0].text for gen in response.generations]
             # raise NotImplementedError
             # messages = [[example_template.prepare_for_turbo(e)
@@ -37,9 +37,9 @@ def complete_prompts(params, llm, examples, prompts, sep, example_template):
         #     choices = [example_template.get_choices(**ex) for ex in examples]
         #     llm_outputs = llm._classify_v3(prompts=prompts, choices=choices)
         # else:
-        response = llm.generate(prompts, stop=[sep])
+        response = llm.generate(prompts)
         llm_outputs = [gen[0].text for gen in response.generations]
-            # raise NotImplementedError
+        # raise NotImplementedError
 
     return llm_outputs
 
@@ -128,7 +128,10 @@ def eval(
                 for ex in test_batch])
 
             # Complete prompts
-            llm_outputs = complete_prompts(params, llm, test_batch, prompts, sep, example_template)
+            if params.lm_name in chat_lms:
+                llm_outputs = ['' for _ in prompts]
+            else:
+                llm_outputs = complete_prompts(params, llm, test_batch, prompts, sep, example_template)
 
             # Evaluate prompts and completions
             for ex, prompt, demos, llm_output in zip(test_batch, prompts, demos_l, llm_outputs):

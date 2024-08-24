@@ -83,6 +83,7 @@ class BalancedBertScoreSelector(BertScoreSelector):
 
         # score candidates
         beg = time.time()
+        n_shots = args.n_shots
         if not args.coverage:
             with torch.no_grad():
                 def get_batch_scores(q_idxes):
@@ -103,13 +104,22 @@ class BalancedBertScoreSelector(BertScoreSelector):
                     scores = torch.cat(scores_l, axis=1)
                     return scores
                 batch_size, batch_scores = 1, []
+                shot_idxs_l, shot_scores_l = [], []
                 query_iter = chunked(range(n_queries), batch_size)
                 if progress_bar: query_iter = track(list(query_iter), description='Finding shots')
                 for q_idxes in query_iter:
-                    batch_scores.append(get_batch_scores(q_idxes).cpu())
-                scores = torch.cat(batch_scores, axis=0)
-                shot_scores_l = scores.sort(axis=-1).values[:, -args.n_shots:].numpy()
-                shot_idxs_l = scores.argsort(axis=-1)[:, -args.n_shots:].numpy()
+                    scores = get_batch_scores(q_idxes).cpu()
+                    shot_idxs = scores.argsort()
+                    shot_scores = scores.sort().values
+                    balanced_shot_idxs, balanced_shot_scores = cls.get_balanced_shots(shot_idxs, shot_scores, n_shots, cand_labels)
+                    shot_idxs_l.append(balanced_shot_idxs)
+                    shot_scores_l.append(balanced_shot_scores)
+                shot_idxs_l = np.array(shot_idxs_l)
+                shot_scores_l = np.array(shot_scores_l)
+                # balanced_shot_idxs, balanced_shot_scores = cls.get_balanced_shots(shot_idxs, shot_scores, n_shots, cand_labels)
+                # shot_idxs_l.append(np.array(balanced_shot_idxs))
+                # shot_scores_l.append(np.array(balanced_shot_scores))
+
             torch.cuda.empty_cache()
             selector = cls(
                args=args,
@@ -121,7 +131,6 @@ class BalancedBertScoreSelector(BertScoreSelector):
                 shot_idxs_l=shot_idxs_l,
             )
         else:
-            n_shots = args.n_shots
             args.n_shots = len(cand_strings)
             shot_idxs_l, shot_scores_l = [], []
             query_iter = range(n_queries)
@@ -141,21 +150,9 @@ class BalancedBertScoreSelector(BertScoreSelector):
                 )
                 shot_idxs = shot_idxs[::-1]
                 shot_scores = shot_scores[::-1]
-                balanced_shot_idxs = []
-                balanced_shot_scores = []
-                max_qty = round(n_shots / len(set(cand_labels)))
-                counter = {}
-                for idx, score in zip(shot_idxs, shot_scores):
-                    label = cand_labels[idx]
-                    if counter.get(label, 0) >= max_qty:
-                        continue
-                    balanced_shot_idxs.append(idx)
-                    balanced_shot_scores.append(score)
-                    counter[label] = counter.get(label, 0) + 1
-                    if len(balanced_shot_idxs) >= n_shots:
-                        break
-                shot_idxs_l.append(np.array(balanced_shot_idxs))
-                shot_scores_l.append(np.array(balanced_shot_scores))
+                balanced_shot_idxs, balanced_shot_scores = cls.get_balanced_shots(shot_idxs, shot_scores, n_shots, cand_labels)
+                shot_idxs_l.append(balanced_shot_idxs)
+                shot_scores_l.append(balanced_shot_scores)
             print(f'Average number of shots: {np.mean([len(shot_idxs) for shot_idxs in shot_idxs_l])}')
 
             args.n_shots = n_shots
@@ -174,3 +171,20 @@ class BalancedBertScoreSelector(BertScoreSelector):
             return selector, sel_time
         else:
             return selector
+
+    @classmethod
+    def get_balanced_shots(cls, shot_idxs, shot_scores, n_shots, cand_labels):
+        balanced_shot_idxs = []
+        balanced_shot_scores = []
+        max_qty = round(n_shots / len(set(cand_labels)))
+        counter = {}
+        for idx, score in zip(shot_idxs.flatten(), shot_scores.flatten()):
+            label = cand_labels[idx]
+            if counter.get(label, 0) >= max_qty:
+                continue
+            balanced_shot_idxs.append(idx)
+            balanced_shot_scores.append(score)
+            counter[label] = counter.get(label, 0) + 1
+            if len(balanced_shot_idxs) >= n_shots:
+                break
+        return np.array(balanced_shot_idxs), np.array(balanced_shot_scores)

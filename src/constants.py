@@ -54,6 +54,10 @@ class Dataset(str, Enum):
     PAWSX = 'pawsx'     # https://huggingface.co/datasets/paws-x
 
     # Commonsense Reasoning
+    COPA = 'copa'
+    SWAG = 'swag'
+    HELLASWAG = 'hellaswag'
+    PIQA = 'piqa'
     CMSQA = 'cmsqa'
 
     # Summarization

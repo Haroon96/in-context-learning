@@ -128,10 +128,10 @@ def eval(
                 for ex in test_batch])
 
             # Complete prompts
-            if params.lm_name in chat_lms:
-                llm_outputs = ['' for _ in prompts]
-            else:
-                llm_outputs = complete_prompts(params, llm, test_batch, prompts, sep, example_template)
+            # if params.lm_name in chat_lms:
+            #     llm_outputs = ['' for _ in prompts]
+            # else:
+            llm_outputs = complete_prompts(params, llm, test_batch, prompts, sep, example_template)
 
             # Evaluate prompts and completions
             for ex, prompt, demos, llm_output in zip(test_batch, prompts, demos_l, llm_outputs):

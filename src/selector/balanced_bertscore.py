@@ -109,8 +109,8 @@ class BalancedBertScoreSelector(BertScoreSelector):
                 if progress_bar: query_iter = track(list(query_iter), description='Finding shots')
                 for q_idxes in query_iter:
                     scores = get_batch_scores(q_idxes).cpu()
-                    shot_idxs = scores.argsort()
-                    shot_scores = scores.sort().values
+                    shot_idxs = scores.argsort()[0].tolist()[::-1]
+                    shot_scores = scores.sort()[0][0].tolist()[::-1]
                     balanced_shot_idxs, balanced_shot_scores = cls.get_balanced_shots(shot_idxs, shot_scores, n_shots, cand_labels)
                     shot_idxs_l.append(balanced_shot_idxs)
                     shot_scores_l.append(balanced_shot_scores)
@@ -178,7 +178,7 @@ class BalancedBertScoreSelector(BertScoreSelector):
         balanced_shot_scores = []
         max_qty = round(n_shots / len(set(cand_labels)))
         counter = {}
-        for idx, score in zip(shot_idxs.flatten(), shot_scores.flatten()):
+        for idx, score in zip(shot_idxs, shot_scores):
             label = cand_labels[idx]
             if counter.get(label, 0) >= max_qty:
                 continue

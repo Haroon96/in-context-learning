@@ -85,6 +85,26 @@ class Dataset(str, Enum):
     NEWSSOURCEIDEOLOGY = 'newssourceideology'
     NEWSDESCRIPTIONIDEOLOGY = 'newsdescriptionideology'
     NEWSSOURCEDESCRIPTIONIDEOLOGY = 'newssourcedescriptionideology'
+    BALYNEWSIDEOLOGY = 'balynewsideology'
+    BALYNEWSSOURCEIDEOLOGY = 'balynewssourceideology'
+    BALYNEWSDESCRIPTIONIDEOLOGY = 'balynewsdescriptionideology'
+    BALYNEWSSOURCEDESCRIPTIONIDEOLOGY = 'balynewssourcedescriptionideology'
+
+    YTPOLNEWS = 'ytpolnews'
+    YTPOLNEWSCHANNEL = 'ytpolnewschannel'
+    YTPOLNEWSDESCRIPTION = 'ytpolnewsdescription'
+    YTPOLNEWSCHANNELDESCRIPTION = 'ytpolnewschanneldescription'
+
+    YTNONPOLNEWS = 'ytnonpolnews'
+    YTNONPOLNEWSCHANNEL = 'ytnonpolnewschannel'
+    YTNONPOLNEWSDESCRIPTION = 'ytnonpolnewsdescription'
+    YTNONPOLNEWSCHANNELDESCRIPTION = 'ytnonpolnewschanneldescription'
+
+    YTPOLNONNEWS = 'ytpolnonnews'
+    YTPOLNONNEWSCHANNEL = 'ytpolnonnewschannel'
+    YTPOLNONNEWSDESCRIPTION = 'ytpolnonnewsdescription'
+    YTPOLNONNEWSCHANNELDESCRIPTION = 'ytpolnonnewschanneldescription'
+
 
 D = Dataset
 T = Task
@@ -102,6 +122,10 @@ category2datasets = {
              D.NEWSIDEOLOGY, D.NEWSSOURCEIDEOLOGY, D.NEWSSOURCEDESCRIPTIONIDEOLOGY, D.NEWSDESCRIPTIONIDEOLOGY,
              D.YTIDEOLOGY, D.YTCHANNELIDEOLOGY, D.YTDESCRIPTIONIDEOLOGY, 
              D.YTCHANNELDESCRIPTIONIDEOLOGY,
+             D.BALYNEWSDESCRIPTIONIDEOLOGY, D.BALYNEWSIDEOLOGY, D.BALYNEWSSOURCEDESCRIPTIONIDEOLOGY, D.BALYNEWSSOURCEIDEOLOGY,
+             D.YTPOLNEWS, D.YTPOLNEWSCHANNEL, D.YTPOLNEWSCHANNELDESCRIPTION, D.YTPOLNEWSDESCRIPTION,
+             D.YTNONPOLNEWS, D.YTNONPOLNEWSCHANNEL, D.YTNONPOLNEWSCHANNELDESCRIPTION, D.YTNONPOLNEWSDESCRIPTION,
+             D.YTPOLNONNEWS, D.YTPOLNONNEWSCHANNEL, D.YTPOLNONNEWSCHANNELDESCRIPTION, D.YTPOLNONNEWSDESCRIPTION
              ]
 }
 heldout_datasets = [
@@ -136,7 +160,7 @@ class LLM(str, Enum):
     LLAMA13B = 'llama-13B'
     LLAMA30B = 'llama-30B'
     STARCODER = 'bigcode/starcoder'
-    MISTRAL = 'mistralai/Mistral-7B-v0.1'
+    MISTRAL = 'mistralai/Mistral-7B-Instruct-v0.2'
     ZEPHYR = 'HuggingFaceH4/zephyr-7b-alpha'
 
     BABBAGE_002 = 'babbage-002'
@@ -167,7 +191,7 @@ context_length_limit = {
     LLM.LLAMA7B: 2048,
     LLM.LLAMA13B: 2048,
     LLM.STARCODER: 7000,
-    LLM.MISTRAL: 8192,
+    LLM.MISTRAL: 32768,
     LLM.ZEPHYR: 8192,
     LLM.MAJORITY: 100000,
 }

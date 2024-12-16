@@ -3,8 +3,8 @@ from pathlib import Path
 
 
 def llama_path(model_size: str = '7B'):
-    if Path(f'/home/mharoon/llama/llama-2-{model_size.lower()}-chat').exists():
-        return f'/home/mharoon/llama/llama-2-{model_size.lower()}-chat'
+    if Path(f'/home/mharoon/llama/llama-2-{model_size.lower()}-chat-converted').exists():
+        return f'/home/mharoon/llama/llama-2-{model_size.lower()}-chat-converted'
     # if Path(f'/srv/disk01/ucinlp/shivag5/llama_hf/{model_size}').exists():
     #     return f'/srv/disk01/ucinlp/shivag5/llama_hf/{model_size}'
     # elif Path(f'/srv/nvme0/ucinlp/shivag5/llama_hf/{model_size}/').exists():
